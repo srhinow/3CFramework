@@ -1,0 +1,1 @@
+<input type="submit" name="<?php echo $this->formkey; ?>" id="<?php echo $this->id; ?>" class="tl_submit <?php echo $this->class; ?>" accesskey="<?php echo $this->accesskey; ?>" value="<?php echo $this->value; ?>" />	
