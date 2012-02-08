@@ -1,0 +1,14 @@
+/**
+ * Package    	DC_Memory / 3CFramework
+ * Copyright  	MEN AT WORK 2012
+ * Author       Andreas Isaak <cms@men-at-work.de>, David Maack <cms@men-at-work.de>, Stefan Heimes <cms@men-at-work.de>
+ * Link         http://www.men-at-work.de/
+ * License    	GNU/LGPL
+ */
+
+/**
+ * Package    	DC_Memory / 3CFramework
+ * Copyright  	Stefan Lindecke 2011
+ * Author       Stefan Lindecke <stefan@ktrion.de>, Yanick Witschi <yanick.witschi@certo-net.ch>
+ * Link         http://www.chektrion.de
+ */
