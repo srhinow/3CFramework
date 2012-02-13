@@ -1049,7 +1049,7 @@ window.addEvent(\'domready\', function()
         $this->redirect($this->getReferer());
     }
 
-    protected function row()
+    protected function row($strPalette=null)
     {
         // Call onsubmit_callback
         if (is_array($GLOBALS['TL_DCA'][$this->strTable]['config']['onsubmit_pre_callback']))
