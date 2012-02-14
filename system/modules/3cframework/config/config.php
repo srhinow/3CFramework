@@ -30,15 +30,23 @@
 define('NEWLINE', '
 ');
 
-// rewrite JS AJAX Calls for toggleSubpalette
-$GLOBALS['TL_HOOKS']['executePostActions'][] = array('FrameworkHelper', 'myExecutePostActions');
-// rewirte JS AJAX Calls for togglesubpalettes
-$GLOBALS['TL_HOOKS']['executePostActions'][] = array('FrameworkHelper', 'toggleSubpalettes');
+/**
+ * Hooks
+ */
+// Callbacks for FileTreeMemory
+$GLOBALS['TL_HOOKS']['executePreActions'][] = array('FrameworkHelper', 'executePreActions');
+$GLOBALS['TL_HOOKS']['executePostActions'][] = array('FrameworkHelper', 'executePostActions');
 
-// Include JS
-$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/3cframework/html/backend.js';
-
-// Elements
+/**
+ * Form fields
+ */
+$GLOBALS['BE_FFL']['fileTreeMemory'] = 'FileTreeMemory';
 $GLOBALS['BE_FFL']['statictext'] = 'StaticText';
+
+if (TL_MODE == 'BE')
+{
+	// Include JS
+	$GLOBALS['TL_JAVASCRIPT']['filetreememory'] = 'system/modules/3cframework/html/dcmemory_src.js';
+}
 
 ?>

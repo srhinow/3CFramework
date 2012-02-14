@@ -1,4 +1,7 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+<?php
+
+if (!defined('TL_ROOT'))
+    die('You can not access this file directly!');
 
 /**
  * Contao Open Source CMS
@@ -28,60 +31,145 @@
  * @license    GNU/LGPL 
  * @filesource
  */
-
 class FrameworkHelper extends Backend
 {
-
-    public function toggleSubpalettes($strAction, $dc)
+    /**
+     * Ajax actions that do not require a data container object
+     */
+    public function executePreActions($strAction)
     {
-        if ($strAction == "DcMemToggleSubpalette")
+        switch ($strAction)
         {
-            if ($dc instanceof DC_Memory)
-            {
+            // Toggle nodes of the file or page tree
+            case 'toggleFiletreeMemory':
+                $this->strAjaxId = preg_replace('/.*_([0-9a-zA-Z]+)$/i', '$1', $this->Input->post('id'));
+                $this->strAjaxKey = str_replace('_' . $this->strAjaxId, '', $this->Input->post('id'));
+
                 if ($this->Input->get('act') == 'editAll')
                 {
-                    $this->strAjaxId = preg_replace('/.*_([0-9a-zA-Z]+)$/i', '$1', $this->Input->post('id'));
+                    $this->strAjaxKey = preg_replace('/(.*)_[0-9a-zA-Z]+$/i', '$1', $this->strAjaxKey);
+                    $this->strAjaxName = preg_replace('/.*_([0-9a-zA-Z]+)$/i', '$1', $this->Input->post('name'));
+                }
 
-                    if ($this->Input->post('load'))
-                    {
-                        echo json_encode(array
-                            (
-                            'content' => $dc->editAll($this->strAjaxId, $this->Input->post('id')),
-                            'token'   => REQUEST_TOKEN
-                        ));
-                        exit;
-                        break;
-                    }
-                }
-                else
+                $nodes                   = $this->Session->get($this->strAjaxKey);
+                $nodes[$this->strAjaxId] = intval($this->Input->post('state'));
+                $this->Session->set($this->strAjaxKey, $nodes);
+
+                echo json_encode(array('token' => REQUEST_TOKEN));
+                exit;
+                break;
+
+            // Load nodes of the file or page tree
+            case 'loadFiletreeMemory':
+                $this->strAjaxId = preg_replace('/.*_([0-9a-zA-Z]+)$/i', '$1', $this->Input->post('id'));
+                $this->strAjaxKey = str_replace('_' . $this->strAjaxId, '', $this->Input->post('id'));
+
+                if ($this->Input->get('act') == 'editAll')
                 {
-                    if ($this->Input->post('load'))
-                    {
-                        echo json_encode(array(
-                            'content' => $dc->edit(false, $this->Input->post('id')),
-                            'token'   => REQUEST_TOKEN
-                        ));
-                        exit;
-                        break;
-                    }
+                    $this->strAjaxKey = preg_replace('/(.*)_[0-9a-zA-Z]+$/i', '$1', $this->strAjaxKey);
+                    $this->strAjaxName = preg_replace('/.*_([0-9a-zA-Z]+)$/i', '$1', $this->Input->post('name'));
                 }
-            }
+
+                $nodes                   = $this->Session->get($this->strAjaxKey);
+                $nodes[$this->strAjaxId] = intval($this->Input->post('state'));
+                $this->Session->set($this->strAjaxKey, $nodes);
+                break;
         }
     }
 
-    public function myExecutePostActions($strAction, DataContainer $dc)
+    /**
+     * Ajax actions that do require a data container object
+     * @param object
+     */
+    public function executePostActions($strAction, DataContainer $dc)
     {
-        if ($strAction == 'toggleDCMemorySubpalette')
+        //header('Content-Type: text/html; charset=' . $GLOBALS['TL_CONFIG']['characterSet']);
+        switch ($strAction)
         {
-            if ($dc instanceof DC_Memory)
-            {
-                $dc->setData($this->Input->post('field'), (intval($this->Input->post('state') == 1) ? 1 : ''));
-
-                if ($this->Input->post('load'))
+            // Load subpalette
+            case "DcMemToggleSubpalette":
+                if ($dc instanceof DC_Memory)
                 {
-                    echo $dc->edit(false, $this->Input->post('id'));
+                    if ($this->Input->get('act') == 'editAll')
+                    {
+                        $this->strAjaxId = preg_replace('/.*_([0-9a-zA-Z]+)$/i', '$1', $this->Input->post('id'));
+
+                        if ($this->Input->post('load'))
+                        {
+                            echo json_encode(array(
+                                'content' => $dc->editAll($this->strAjaxId, $this->Input->post('id')),
+                                'token' => REQUEST_TOKEN
+                            ));
+                            exit;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        if ($this->Input->post('load'))
+                        {
+                            echo json_encode(array(
+                                'content' => $dc->edit(false, $this->Input->post('id')),
+                                'token' => REQUEST_TOKEN
+                            ));
+                            exit;
+                            break;
+                        }
+                    }
                 }
-            }
+                break;
+
+            // Load nodes of the file tree
+            case 'loadFiletreeMemory':
+                $arrData['strTable'] = $dc->table;
+                $arrData['id']       = strlen($this->strAjaxName) ? $this->strAjaxName : $dc->id;
+                $arrData['name']     = $this->Input->post('name');
+
+                $objWidget = new $GLOBALS['BE_FFL']['fileTreeMemory']($arrData, $dc);
+
+                // Load a particular node
+                if ($this->Input->post('folder', true) != '')
+                {
+                    echo json_encode(array
+                        (
+                        'content' => $objWidget->generateAjax($this->Input->post('folder', true), $this->Input->post('field'), intval($this->Input->post('level'))),
+                        'token' => REQUEST_TOKEN
+                    ));
+                    exit;
+                    break;
+                }
+
+                // Reload the whole tree
+                $this->import('BackendUser', 'User');
+                $tree = '';
+
+                // Set a custom path
+                if (strlen($GLOBALS['TL_DCA'][$dc->table]['fields'][$this->Input->post('field')]['eval']['path']))
+                {
+                    $tree = $objWidget->generateAjax($GLOBALS['TL_DCA'][$dc->table]['fields'][$this->Input->post('field')]['eval']['path'], $this->Input->post('field'), intval($this->Input->post('level')));
+                }
+
+                // Start from root
+                elseif ($this->User->isAdmin)
+                {
+                    $tree = $objWidget->generateAjax($GLOBALS['TL_CONFIG']['uploadPath'], $this->Input->post('field'), intval($this->Input->post('level')));
+                }
+
+                // Set filemounts
+                else
+                {
+                    foreach ($this->eliminateNestedPaths($this->User->filemounts) as $node)
+                    {
+                        $tree .= $objWidget->generateAjax($node, $this->Input->post('field'), intval($this->Input->post('level')), true);
+                    }
+                }
+
+                echo json_encode(array(
+                    'content' => $tree,
+                    'token' => REQUEST_TOKEN
+                ));
+                exit;
+                break;
         }
     }
 
