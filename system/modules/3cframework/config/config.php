@@ -27,7 +27,7 @@
  * @filesource
  */
 
-define('NEWLINE', '\n');
+define('NEWLINE', "\n");
 
 /**
  * Hooks
