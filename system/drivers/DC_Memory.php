@@ -1023,7 +1023,7 @@ window.addEvent(\'domready\', function()
         }
 
         $strReturn = $this->objDCACompound->parse();
-        $strReturn = str_replace("AjaxRequest.toggleSubpalette", "DCMemoryAjaxRequest.toggleSubpalette", $strReturn);
+        $strReturn = str_replace("AjaxRequest.toggleSubpalette", "AjaxRequestMemory.toggleSubpalette", $strReturn);
 
         return $strReturn;
     }
