@@ -19,8 +19,8 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  Leo Feyer 2005-2011
- * @copyright  MEN AT WORK 2011
+ * @copyright  Leo Feyer 2005-2012
+ * @copyright  MEN AT WORK 2012
  * @package    Backend
  * @license    LGPL
  * @filesource
@@ -31,8 +31,8 @@
  * Class AjaxRequestMemory
  *
  * Provide methods to handle Ajax requests.
- * @copyright  Leo Feyer 2005-2011
- * @copyright  MEN AT WORK 2011
+ * @copyright  Leo Feyer 2005-2012
+ * @copyright  MEN AT WORK 2012
  * @package    Backend
  */
 var AjaxRequestMemory =

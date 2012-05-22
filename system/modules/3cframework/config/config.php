@@ -45,7 +45,7 @@ $GLOBALS['BE_FFL']['statictext'] = 'StaticText';
 if (TL_MODE == 'BE')
 {
 	// Include JS
-	$GLOBALS['TL_JAVASCRIPT']['filetreememory'] = 'system/modules/3cframework/html/dcmemory_src.js';
+	$GLOBALS['TL_JAVASCRIPT']['filetreememory'] = 'system/modules/3cframework/html/dcmemory.js';
 }
 
 ?>
