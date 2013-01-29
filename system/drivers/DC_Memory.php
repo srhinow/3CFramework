@@ -1,87 +1,87 @@
 <?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
 
 /**
- * Contao Open Source CMS
- * Copyright (C) 2005-2011 Leo Feyer
- *
- * Formerly known as TYPOlight Open Source CMS.
- *
- * This program is free software: you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program. If not, please visit the Free
- * Software Foundation website at <http://www.gnu.org/licenses/>.
- *
- * PHP version 5
- * @copyright  Leo Feyer 2005-2011
- * @author     Leo Feyer <http://www.contao.org>
- * @package    Backend
- * @license    LGPL
- * @filesource
- */
+* Contao Open Source CMS
+* Copyright (C) 2005-2011 Leo Feyer
+*
+* Formerly known as TYPOlight Open Source CMS.
+*
+* This program is free software: you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this program. If not, please visit the Free
+* Software Foundation website at <http://www.gnu.org/licenses/>.
+*
+* PHP version 5
+* @copyright Leo Feyer 2005-2011
+* @author Leo Feyer <http://www.contao.org>
+* @package Backend
+* @license LGPL
+* @filesource
+*/
 
 /**
- * Class DC_Memory
- *
- * Provide methods to manage datacontainers with customized loading and storage functionalities
- * @copyright  Stefan Lindecke 2011
- * @copyright  MEN AT WORK 2012
- * @author     Stefan Lindecke  <stefan@ktrion.de>
- * @author     Yanick Witschi   <yanick.witschi@certo-net.ch>
- * @author     MEN AT WORK      <cms@men-at-work.de>
- * @package    DC_Memory
- */
+* Class DC_Memory
+*
+* Provide methods to manage datacontainers with customized loading and storage functionalities
+* @copyright Stefan Lindecke 2011
+* @copyright MEN AT WORK 2012
+* @author Stefan Lindecke <stefan@ktrion.de>
+* @author Yanick Witschi <yanick.witschi@certo-net.ch>
+* @author MEN AT WORK <cms@men-at-work.de>
+* @package DC_Memory
+*/
 class DC_Memory extends DataContainer implements listable, editable
 {
 
     /**
-     * Array containing the buttons
-     * @var array
-     */
+* Array containing the buttons
+* @var array
+*/
     protected $arrSubmitButtons = array();
 
     /**
-     * The compound template object
-     * @var tplCompound
-     */
+* The compound template object
+* @var tplCompound
+*/
     protected $objDCACompound = null;
 
     /**
-     * Array containing the field data
-     * @var array
-     */
+* Array containing the field data
+* @var array
+*/
     protected $arrData = array();
 
     /**
-     * Language config object
-     * @var object
-     */
+* Language config object
+* @var object
+*/
     protected $objLanguageConfig = null;
 
     /**
-     * Language we're currently editing
-     * @var string
-     */
+* Language we're currently editing
+* @var string
+*/
     protected $strLanguage = '';
 
     /**
-     * Language editing mode (either "delete" or "edit")
-     * @var string
-     */
+* Language editing mode (either "delete" or "edit")
+* @var string
+*/
     protected $strLanguageEditMode = '';
 
     /**
-     * Initialize the object
-     * @param string | the database table
-     */
+* Initialize the object
+* @param string | the database table
+*/
     public function __construct($strTable)
     {
         parent::__construct();
@@ -103,21 +103,21 @@ class DC_Memory extends DataContainer implements listable, editable
         // Set default buttons, you can always add more buttons using the addButton() method
         $this->addButton('save', array
             (
-            'id'              => 'save',
-            'formkey'         => 'save',
-            'class'           => '',
-            'accesskey'       => 's',
-            'value'           => specialchars($GLOBALS['TL_LANG']['MSC']['save']),
+            'id' => 'save',
+            'formkey' => 'save',
+            'class' => '',
+            'accesskey' => 's',
+            'value' => specialchars($GLOBALS['TL_LANG']['MSC']['save']),
             'button_callback' => array('DC_Memory', 'saveButtonCallback')
         ));
 
         $this->addButton('saveNclose', array
             (
-            'id'              => 'save',
-            'formkey'         => 'saveNclose',
-            'class'           => '',
-            'accesskey'       => 'c',
-            'value'           => specialchars($GLOBALS['TL_LANG']['MSC']['saveNclose']),
+            'id' => 'save',
+            'formkey' => 'saveNclose',
+            'class' => '',
+            'accesskey' => 'c',
+            'value' => specialchars($GLOBALS['TL_LANG']['MSC']['saveNclose']),
             'button_callback' => array('DC_Memory', 'saveNcloseButtonCallback')
         ));
 
@@ -158,11 +158,11 @@ class DC_Memory extends DataContainer implements listable, editable
     }
 
     /**
-     * Add your own buttons to the form.
-     * @param string | button ID - e.g. "saveNclose"
-     * @param array | see __construct() for the default buttons so you know what parameters ar possible
-     * @see self::__construct()
-     */
+* Add your own buttons to the form.
+* @param string | button ID - e.g. "saveNclose"
+* @param array | see __construct() for the default buttons so you know what parameters ar possible
+* @see self::__construct()
+*/
     public function addButton($strButtonId, $arrData)
     {
         if (isset($this->arrSubmitButtons[$strButtonId]))
@@ -174,18 +174,18 @@ class DC_Memory extends DataContainer implements listable, editable
     }
 
     /**
-     * Remove buttons (you can also remove the default ones)
-     * @param string | button id
-     */
+* Remove buttons (you can also remove the default ones)
+* @param string | button id
+*/
     public function removeButton($strButtonId)
     {
         unset($this->arrSubmitButtons[$strButtonId]);
     }
 
     /**
-     * Add language switch possibilities
-     * @param object
-     */
+* Add language switch possibilities
+* @param object
+*/
     public function enableLanguageSwitch($objConfig)
     {
         $this->objLanguageConfig = $objConfig;
@@ -193,37 +193,37 @@ class DC_Memory extends DataContainer implements listable, editable
     }
 
     /**
-     * Set or overwrite a certain value
-     * @param string
-     * @param mixed
-     */
+* Set or overwrite a certain value
+* @param string
+* @param mixed
+*/
     public function setData($strKey, $varValue)
     {
         $this->arrData[$strKey] = $varValue;
     }
 
     /**
-     * Get a certain value
-     * @return mixed
-     */
+* Get a certain value
+* @return mixed
+*/
     public function getData($strKey)
     {
         return $this->arrData[$strKey];
     }
 
-    /**
-     * Get the data as an array
-     * @return array
-     */
+/**
+* Get the data as an array
+* @return array
+*/
     public function getDataArray()
     {
         return $this->arrData;
     }
 
-    /**
-     * Set the data from an array
-     * @param array
-     */
+/**
+* Set the data from an array
+* @param array
+*/
     public function setDataArray($arrData)
     {
         if (is_array($arrData))
@@ -238,28 +238,39 @@ class DC_Memory extends DataContainer implements listable, editable
             $this->arrData = array();
         }
     }
-
-    /**
-     * Get the language we're currently editing
-     * @return string
-     */
+    
+ /**
+ * Set the data from an dbobj
+ * @param array
+ */
+public function setActiveRecord()
+{
+    if(is_array($this->arrData)) 
+    {
+	$this->activeRecord =  (object) $this->arrData;     
+    }
+}
+/**
+* Get the language we're currently editing
+* @return string
+*/
     public function getLanguage()
     {
         return $this->strLanguage;
     }
 
     /**
-     * Get the language editing mode (can either be "edit" or "delete")
-     * @return string
-     */
+* Get the language editing mode (can either be "edit" or "delete")
+* @return string
+*/
     public function getLanguageEditMode()
     {
         return $this->strLanguageEditMode;
     }
 
     /**
-     * Checks for language data and sets it to the session
-     */
+* Checks for language data and sets it to the session
+*/
     protected function checkForLanguageData()
     {
         // get the language (e.g. "dcMemoryLanguage_mytable_2")
@@ -295,45 +306,45 @@ class DC_Memory extends DataContainer implements listable, editable
     }
 
     /**
-     * Automatically switch to edit mode
-     * @return string
-     */
+* Automatically switch to edit mode
+* @return string
+*/
     public function create()
     {
         return $this->edit();
     }
 
     /**
-     * Automatically switch to edit mode
-     * @return string
-     */
+* Automatically switch to edit mode
+* @return string
+*/
     public function cut()
     {
         return $this->edit();
     }
 
     /**
-     * Automatically switch to edit mode
-     * @return string
-     */
+* Automatically switch to edit mode
+* @return string
+*/
     public function copy()
     {
         return $this->edit();
     }
 
     /**
-     * Automatically switch to edit mode
-     * @return string
-     */
+* Automatically switch to edit mode
+* @return string
+*/
     public function move()
     {
         return $this->edit();
     }
 
     /**
-     * Autogenerate a form
-     * @return string
-     */
+* Autogenerate a form
+* @return string
+*/
     public function edit($intID = false, $ajaxId = false)
     {
         $return = '';
@@ -355,14 +366,14 @@ class DC_Memory extends DataContainer implements listable, editable
             
             // Build an array from boxes and rows
             $this->strPalette = $GLOBALS['TL_DCA'][$this->table]['subpalettes'][$strToggleField];
-            $boxes   = trimsplit(';', $this->strPalette);
+            $boxes = trimsplit(';', $this->strPalette);
             $legends = array();
 
             if (count($boxes))
             {
                 foreach ($boxes as $k => $v)
                 {
-                    $eCount    = 1;
+                    $eCount = 1;
                     $boxes[$k] = trimsplit(',', $v);
 
                     foreach ($boxes[$k] as $kk => $vv)
@@ -417,14 +428,15 @@ class DC_Memory extends DataContainer implements listable, editable
                 }
 
                 $class = 'tl_tbox block';
-                $fs    = $this->Session->get('fieldset_states');
-
+                $fs = $this->Session->get('fieldset_states');
+                $blnIsFirst = true;
+                
                 // Render boxes
                 foreach ($boxes as $k => $v)
                 {
-                    $strAjax  = '';
-                    $blnAjax  = false;
-                    $legend   = false;
+                    $strAjax = '';
+                    $blnAjax = false;
+                    $legend = false;
                     $template = 'subpalettes';
 
                     if (isset($legends[$k]))
@@ -449,9 +461,9 @@ class DC_Memory extends DataContainer implements listable, editable
 
                     $cmpFieldset = new tplCompound($class . '_' . $key, $template,
                                     array(
-                                        'id'             => 'pal_' . $key,
-                                        'class'          => $class . ($legend ? '' : ' nolegend'),
-                                        'legend_title'   => isset($GLOBALS['TL_LANG'][$this->strTable][$key]) ? $GLOBALS['TL_LANG'][$this->strTable][$key] : $key,
+                                        'id' => 'pal_' . $key,
+                                        'class' => $class . ($legend ? '' : ' nolegend'),
+                                        'legend_title' => isset($GLOBALS['TL_LANG'][$this->strTable][$key]) ? $GLOBALS['TL_LANG'][$this->strTable][$key] : $key,
                                         'legend_onclick' => "AjaxRequest.toggleFieldset(this, '" . $key . "', '" . $this->strTable . "')"
                                     )
                     );
@@ -467,17 +479,15 @@ class DC_Memory extends DataContainer implements listable, editable
                             }
 
                             $blnAjax = false;
-                            $return .= "\n" . '</div>';
-
                             continue;
                         }
 
                         if (preg_match('/^\[.*\]$/i', $vv))
                         {
-                            $thisId  = 'sub_' . substr($vv, 1, -1);
-                            $blnAjax = ($this->Input->post('isAjax') && $ajaxId == $thisId) ? true : false;
-                            $return .= "\n" . '<div id="' . $thisId . '">';
 
+                            $thisId = 'sub_' . substr($vv, 1, -1);
+                            $blnAjax = ($this->Input->post('isAjax') && $ajaxId == $thisId) ? true : false;
+                            $subFieldsContainer = new tplCompound($thisId, 'compound_div',array('id'=>$thisId));
                             continue;
                         }
 
@@ -496,9 +506,6 @@ class DC_Memory extends DataContainer implements listable, editable
                                     $this->varValue = $this->$callback[0]->$callback[1]($this->varValue, $this);
                                 }
                             }
-
-                            // remove request by AndreasI
-                            //$this->objActiveRecord->{$this->strField} = $this->varValue;
                         }
 
                         // Build row
@@ -508,25 +515,37 @@ class DC_Memory extends DataContainer implements listable, editable
                         }
                         else
                         {
-                            $fieldContainer = new tplCompound('fieldContainer', 'compound_div');
-                            $fieldContainer->addInner(new tplCompound("field_" . $this->strField, "compound_static", $this->row()));
+                            $fieldContainer = new tplCompound("field_" . $this->strField, "compound_static", $this->row());
 
                             if ($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->strField]['addSubmit'])
                             {
                                 $fieldContainer->addInner(new tplCompound("submit_" . $this->strField, "compound_submitbutton",
                                                 array(
-                                                    'id'      => "submit_" . $this->strField,
+                                                    'id' => "submit_" . $this->strField,
                                                     'formkey' => "submit_" . $this->strField,
-                                                    'class'   => $GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->strField]['eval']['button_class'],
-                                                    'value'   => ($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->strField]['label'][2]) ? $GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->strField]['label'][2] : $this->strField)));
+                                                    'class' => $GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->strField]['eval']['button_class'],
+                                                    'value' => ($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->strField]['label'][2]) ? $GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->strField]['label'][2] : $this->strField)));
                             }
-                            $cmpFieldset->addInner($fieldContainer);
+
+                            if($subFieldsContainer)
+                            {
+                                $subFieldsContainer->addInner($fieldContainer);
+                            }
+                            else
+                            {
+                                $cmpFieldset->addInner($fieldContainer);
+                            }
                         }
                     }
-
-
+                    if($subFieldsContainer)
+                    {
+                        $cmpFieldset->addInner($subFieldsContainer);
+                        unset($subFieldsContainer);
+                    }
                     $objDCAForm->addInner($cmpFieldset);
+
                 }
+
             }
             
             return $objDCAForm->parse();
@@ -535,8 +554,6 @@ class DC_Memory extends DataContainer implements listable, editable
 
         $objDCAForm = new tplCompound('editForm', 'compound_form');
 
-        // remove request by AndreasI
-        //$this->objActiveRecord = $objRow;
         // create the initial version (you can use the official createInitialVersion() in your callback but we want to be as flexible as possible)
         if ($GLOBALS['TL_DCA'][$this->strTable]['config']['enableVersioning'])
         {
@@ -574,14 +591,14 @@ class DC_Memory extends DataContainer implements listable, editable
 
         // Build an array from boxes and rows
         $this->strPalette = $this->getPalette();
-        $boxes   = trimsplit(';', $this->strPalette);
+        $boxes = trimsplit(';', $this->strPalette);
         $legends = array();
 
         if (count($boxes))
         {
             foreach ($boxes as $k => $v)
             {
-                $eCount    = 1;
+                $eCount = 1;
                 $boxes[$k] = trimsplit(',', $v);
 
                 foreach ($boxes[$k] as $kk => $vv)
@@ -636,14 +653,15 @@ class DC_Memory extends DataContainer implements listable, editable
             }
 
             $class = 'tl_tbox block';
-            $fs    = $this->Session->get('fieldset_states');
-
+            $fs = $this->Session->get('fieldset_states');
+            $blnIsFirst = true;
+            
             // Render boxes
             foreach ($boxes as $k => $v)
             {
-                $strAjax  = '';
-                $blnAjax  = false;
-                $legend   = false;
+                $strAjax = '';
+                $blnAjax = false;
+                $legend = false;
                 $template = 'compound_fieldsetlegend';
 
                 if (isset($legends[$k]))
@@ -669,9 +687,9 @@ class DC_Memory extends DataContainer implements listable, editable
 
                 $cmpFieldset = new tplCompound($class . '_' . $key, $template,
                                 array(
-                                    'id'             => 'pal_' . $key,
-                                    'class'          => $class . ($legend ? '' : ' nolegend'),
-                                    'legend_title'   => isset($GLOBALS['TL_LANG'][$this->strTable][$key]) ? $GLOBALS['TL_LANG'][$this->strTable][$key] : $key,
+                                    'id' => 'pal_' . $key,
+                                    'class' => $class . ($legend ? '' : ' nolegend'),
+                                    'legend_title' => isset($GLOBALS['TL_LANG'][$this->strTable][$key]) ? $GLOBALS['TL_LANG'][$this->strTable][$key] : $key,
                                     'legend_onclick' => "AjaxRequest.toggleFieldset(this, '" . $key . "', '" . $this->strTable . "')"
                                 )
                 );
@@ -686,19 +704,17 @@ class DC_Memory extends DataContainer implements listable, editable
                             return $strAjax . '<input type="hidden" name="FORM_FIELDS[]" value="' . specialchars($this->strPalette) . '" />';
                         }
 
-                        $blnAjax = false;
-                        $return .= "\n" . '</div>';
-
+                        $blnAjax = false;                       
                         continue;
                     }
 
                     if (preg_match('/^\[.*\]$/i', $vv))
                     {
-                        $thisId  = 'sub_' . substr($vv, 1, -1);
+                        $thisId = 'sub_' . substr($vv, 1, -1);
                         $blnAjax = ($this->Input->post('isAjax') && $ajaxId == $thisId) ? true : false;
-                        $return .= "\n" . '<div id="' . $thisId . '">';
-
+                        $subFieldsContainer = new tplCompound($thisId, 'compound_div',array('id'=>$thisId));
                         continue;
+                        
                     }
 
                     $this->strField = $vv;
@@ -720,7 +736,7 @@ class DC_Memory extends DataContainer implements listable, editable
                         // remove request by AndreasI
                         //$this->objActiveRecord->{$this->strField} = $this->varValue;
                     }
-
+                    
                     // Build row
                     if ($blnAjax)
                     {
@@ -728,23 +744,33 @@ class DC_Memory extends DataContainer implements listable, editable
                     }
                     else
                     {
-                        $fieldContainer = new tplCompound('fieldContainer', 'compound_div');
-                        $fieldContainer->addInner(new tplCompound("field_" . $this->strField, "compound_static", $this->row()));
+                        $fieldContainer = new tplCompound("field_" . $this->strField, "compound_static", $this->row());
 
                         if ($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->strField]['addSubmit'])
                         {
                             $fieldContainer->addInner(new tplCompound("submit_" . $this->strField, "compound_submitbutton",
                                             array(
-                                                'id'      => "submit_" . $this->strField,
+                                                'id' => "submit_" . $this->strField,
                                                 'formkey' => "submit_" . $this->strField,
-                                                'class'   => $GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->strField]['eval']['button_class'],
-                                                'value'   => ($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->strField]['label'][2]) ? $GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->strField]['label'][2] : $this->strField)));
+                                                'class' => $GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->strField]['eval']['button_class'],
+                                                'value' => ($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->strField]['label'][2]) ? $GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->strField]['label'][2] : $this->strField)));
                         }
-                        $cmpFieldset->addInner($fieldContainer);
+                        
+                        if($subFieldsContainer)
+                        {
+                            $subFieldsContainer->addInner($fieldContainer);
+                        }
+                        else
+                        {
+                            $cmpFieldset->addInner($fieldContainer);
+                        }
                     }
                 }
-
-
+                if($subFieldsContainer) 
+                {
+		    $cmpFieldset->addInner($subFieldsContainer);
+		    unset($subFieldsContainer);
+                }
                 $objDCAForm->addInner($cmpFieldset);
             }
         }
@@ -753,12 +779,12 @@ class DC_Memory extends DataContainer implements listable, editable
         if ($GLOBALS['TL_DCA'][$this->strTable]['config']['enableVersioning'] || $this->objLanguageConfig->enable)
         {
             $objVersionPanel = new tplCompound('tl_version_panel', 'compound_div', array('class' => 'tl_version_panel'));
-
+          
             if ($GLOBALS['TL_DCA'][$this->strTable]['config']['enableVersioning'])
             {
                 // version data
                 $strVersionData = '';
-                $arrVersions    = array();
+                $arrVersions = array();
 
                 // Trigger the listversions_callback
                 if (is_array($GLOBALS['TL_DCA'][$this->strTable]['config']['dcMemory_versioning_list_callback']))
@@ -870,12 +896,12 @@ class DC_Memory extends DataContainer implements listable, editable
         $returnLinkContainer->addInner(
                 new tplCompound('header_back', 'compound_ahref',
                         array(
-                            'href'      => $this->getReferer(true),
-                            'class'     => 'header_back',
-                            'title'     => specialchars($GLOBALS['TL_LANG']['MSC']['backBT']),
+                            'href' => $this->getReferer(true),
+                            'class' => 'header_back',
+                            'title' => specialchars($GLOBALS['TL_LANG']['MSC']['backBT']),
                             'accesskey' => 'b',
-                            'onclick'   => "Backend.getScrollOffset();",
-                            'value'     => $GLOBALS['TL_LANG']['MSC']['backBT']
+                            'onclick' => "Backend.getScrollOffset();",
+                            'value' => $GLOBALS['TL_LANG']['MSC']['backBT']
                         )
                 )
         );
@@ -936,7 +962,7 @@ class DC_Memory extends DataContainer implements listable, editable
             if (!$GLOBALS['TL_DCA'][$this->strTable]['config']['disableSubmit'])
             {
                 $objButtonContainer = new tplCompound('tl_formbody_submit', 'compound_div');
-                $objSubmitButtons   = new tplCompound('tl_submit_container', 'compound_div');
+                $objSubmitButtons = new tplCompound('tl_submit_container', 'compound_div');
 
                 foreach ($this->arrSubmitButtons as $strButtonKey => $arrButtonData)
                 {
@@ -976,7 +1002,7 @@ class DC_Memory extends DataContainer implements listable, editable
                             break;
                         }
 
-                        $strClass  = $arrButtonData['button_callback'][0];
+                        $strClass = $arrButtonData['button_callback'][0];
                         $strMethod = $arrButtonData['button_callback'][1];
 
                         // DC_Memory internal callbacks (don't want to put them external just because the constructor needs a param)
@@ -1014,7 +1040,7 @@ class DC_Memory extends DataContainer implements listable, editable
 <!--//--><![CDATA[//><!--
 window.addEvent(\'domready\', function()
 {
-    Backend.vScrollTo(($(\'' . $this->strTable . '\').getElement(\'label.error\').getPosition().y - 20));
+Backend.vScrollTo(($(\'' . $this->strTable . '\').getElement(\'label.error\').getPosition().y - 20));
 });
 //--><!]]>
 </script>';
@@ -1029,20 +1055,20 @@ window.addEvent(\'domready\', function()
     }
 
     /**
-     * Button callback "save"
-     */
+* Button callback "save"
+*/
     protected function saveButtonCallback()
     {
         $this->reload();
     }
 
     /**
-     * Button callback "saveNclose"
-     */
+* Button callback "saveNclose"
+*/
     protected function saveNcloseButtonCallback()
     {
-        $_SESSION['TL_INFO']    = '';
-        $_SESSION['TL_ERROR']   = '';
+        $_SESSION['TL_INFO'] = '';
+        $_SESSION['TL_ERROR'] = '';
         $_SESSION['TL_CONFIRM'] = '';
 
         setcookie('BE_PAGE_OFFSET', 0, 0, '/');
@@ -1066,10 +1092,10 @@ window.addEvent(\'domready\', function()
     }
 
     /**
-     * Save the current value
-     * @param mixed
-     * @throws Exception
-     */
+* Save the current value
+* @param mixed
+* @throws Exception
+*/
     protected function save($varValue)
     {
         if ($this->Input->post('FORM_SUBMIT') != $this->strTable)
@@ -1088,7 +1114,7 @@ window.addEvent(\'domready\', function()
         // Convert date formats into timestamps
         if (strlen($varValue) && in_array($arrData['eval']['rgxp'], array('date', 'time', 'datim')))
         {
-            $objDate  = new Date($varValue, $GLOBALS['TL_CONFIG'][$arrData['eval']['rgxp'] . 'Format']);
+            $objDate = new Date($varValue, $GLOBALS['TL_CONFIG'][$arrData['eval']['rgxp'] . 'Format']);
             $varValue = $objDate->tstamp;
         }
 
@@ -1138,12 +1164,12 @@ window.addEvent(\'domready\', function()
     }
 
     /**
-     * Return the name of the current palette
-     * @return string
-     */
+* Return the name of the current palette
+* @return string
+*/
     public function getPalette()
     {
-        $palette    = 'default';
+        $palette = 'default';
         $strPalette = $GLOBALS['TL_DCA'][$this->strTable]['palettes'][$palette];
 
         // Check whether there are selector fields
@@ -1182,7 +1208,7 @@ window.addEvent(\'domready\', function()
                     else
                     {
                         $sValues[] = $trigger;
-                        $key       = $name . '_' . $trigger;
+                        $key = $name . '_' . $trigger;
 
                         // Look for a subpalette
                         if (strlen($GLOBALS['TL_DCA'][$this->strTable]['subpalettes'][$key]))
@@ -1212,7 +1238,7 @@ window.addEvent(\'domready\', function()
             {
                 if (strlen($GLOBALS['TL_DCA'][$this->strTable]['palettes'][$paletteName]))
                 {
-                    $palette    = $paletteName;
+                    $palette = $paletteName;
                     $strPalette = $GLOBALS['TL_DCA'][$this->strTable]['palettes'][$paletteName];
 
                     break;
@@ -1230,10 +1256,10 @@ window.addEvent(\'domready\', function()
     }
 
     /**
-     * Implement showAll mode. Use the callback to format the list view.
-     * @TODO: Provide a DC_Memory_Helpers class with helper methods to generate useful panels (limit, filter, search etc.) and other stuff
-     * @return string
-     */
+* Implement showAll mode. Use the callback to format the list view.
+* @TODO: Provide a DC_Memory_Helpers class with helper methods to generate useful panels (limit, filter, search etc.) and other stuff
+* @return string
+*/
     public function showAll()
     {
         $strReturn = '';
@@ -1255,10 +1281,10 @@ window.addEvent(\'domready\', function()
     }
 
     /**
-     * Implement delete mode. Use the callback.
-     * @TODO: Provide a DC_Memory_Helpers class with helper methods to generate useful panels (limit, filter, search etc.) and other stuff
-     * @return string
-     */
+* Implement delete mode. Use the callback.
+* @TODO: Provide a DC_Memory_Helpers class with helper methods to generate useful panels (limit, filter, search etc.) and other stuff
+* @return string
+*/
     public function delete()
     {
         $strReturn = '';
@@ -1280,10 +1306,10 @@ window.addEvent(\'domready\', function()
     }
 
     /**
-     * Implement show mode. Use the callback.
-     * @TODO: Provide a DC_Memory_Helpers class with helper methods to generate useful panels (limit, filter, search etc.) and other stuff
-     * @return string
-     */
+* Implement show mode. Use the callback.
+* @TODO: Provide a DC_Memory_Helpers class with helper methods to generate useful panels (limit, filter, search etc.) and other stuff
+* @return string
+*/
     public function show()
     {
         $strReturn = '';
@@ -1305,10 +1331,10 @@ window.addEvent(\'domready\', function()
     }
 
     /**
-     * Implement undo mode. Use the callback.
-     * @TODO: Provide a DC_Memory_Helpers class with helper methods to generate useful panels (limit, filter, search etc.) and other stuff
-     * @return string
-     */
+* Implement undo mode. Use the callback.
+* @TODO: Provide a DC_Memory_Helpers class with helper methods to generate useful panels (limit, filter, search etc.) and other stuff
+* @return string
+*/
     public function undo()
     {
         $strReturn = '';
