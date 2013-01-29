@@ -130,7 +130,7 @@ class DC_Memory extends DataContainer implements listable, editable
 
         $this->objDCACompound = new tplCompound('tpl_cmp_' . $this->strTable . '_' . $this->intId, $strDCATemplate);
 
-        $this->activeRecord = new stdClass;
+       # $this->activeRecord = new stdClass;
 
         if (is_array($GLOBALS['TL_DCA'][$this->strTable]['config']['onload_pre_callback']))
         {
@@ -247,7 +247,7 @@ public function setActiveRecord()
 {
     if(is_array($this->arrData)) 
     {
-	$this->activeRecord =  (object) $this->arrData;     
+ 	$this->activeRecord =  (object) $this->arrData;     
     }
 }
 /**
@@ -976,12 +976,14 @@ public function setActiveRecord()
         }
 
         $this->objDCACompound->addInner($objDCAForm);
+
         // Reload the page to prevent _POST variables from being sent twice
         if ($this->Input->post('FORM_SUBMIT') == $this->strTable && !$this->noReload)
         {
             // Call onsubmit_callback
             if (is_array($GLOBALS['TL_DCA'][$this->strTable]['config']['onsubmit_callback']))
             {
+
                 foreach ($GLOBALS['TL_DCA'][$this->strTable]['config']['onsubmit_callback'] as $callback)
                 {
                     $this->import($callback[0]);
@@ -1028,7 +1030,7 @@ public function setActiveRecord()
             }
 
             // Reload if no button really wanted to do anything special
-            $this->reload();
+           # $this->reload();
         }
 
         // Set the focus if there is an error
@@ -1104,7 +1106,8 @@ Backend.vScrollTo(($(\'' . $this->strTable . '\').getElement(\'label.error\').ge
         }
 
         $arrData = $GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->strField];
-
+        $this->setActiveRecord();
+        
         // Make sure that checkbox values are boolean
         if ($arrData['inputType'] == 'checkbox' && !$arrData['eval']['multiple'])
         {
@@ -1156,11 +1159,14 @@ Backend.vScrollTo(($(\'' . $this->strTable . '\').getElement(\'label.error\').ge
             $this->setData($this->strField, $deserialize);
 
 
+
             if (is_object($this->activeRecord))
             {
                 $this->activeRecord->{$this->strField} = $this->varValue;
             }
+
         }
+
     }
 
     /**
